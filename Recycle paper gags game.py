@@ -105,8 +105,8 @@ def stop_animations (animations_to_stop):
             animation.stop()
 
 def display_message(heading_text, sub_heading_text):
-    screen.draw.text(heading_text, font_size = 60, center=CENTRE, color ='white')
-    screen.draw.text(sub_heading_text, font_size = 30, center=(CENTRE_X, CENTRE_Y + 30),
+    screen.draw.text(heading_text, fontsize = 60, center=CENTRE, color ='white')
+    screen.draw.text(sub_heading_text, fontsize = 30, center=(CENTRE_X, CENTRE_Y + 30),
                      color='white')
     
 pgzrun.go()
