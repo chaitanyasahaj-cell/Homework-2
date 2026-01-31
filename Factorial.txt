@@ -1,16 +1,17 @@
 number = int(input("Enter a number! --- "))
 
-factorial_result = 1
+sum_factorial = 0
+temporary = number
 
-length = len(number)
-[0]
-for i in range(1, length + 1):
-    factorial_result = factorial_result * i
-    
-print(sum)
+while temporary > 0:
+    digit = temporary % 10
+    digit_factorial = 1
+    for i in range(1, digit + 1):
+        digit_factorial *= i
+    sum_factorial += digit_factorial
+    temporary //= 10
 
-
-
+print("Strong" if sum_factorial == number else "Not Strong")
 
 
 
