@@ -12,7 +12,7 @@ for i in range(10):
     if user_choice == computer_choice:
         print("It's a tie! No points")
     
-    elif user_choice == "Rock" and computer_choice == "Scissors" or user_choice == "Scissors" and computer_choice == "Paper" or user_choice == "Paper" and computer_choice == "Rock":
+    elif user_choice == "Rock" and computer_choice == "Scissor" or user_choice == "Scissor" and computer_choice == "Paper" or user_choice == "Paper" and computer_choice == "Rock":
         print("You win this round! +1 Points.")
         print("The computer choice is {}".format(computer_choice))
         user_points += 1
