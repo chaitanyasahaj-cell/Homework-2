@@ -1,0 +1,30 @@
+words = []
+count = 0
+
+while True:
+    text = input("Enter string ")
+    if text == "-1":
+        break
+    words.append(text)
+
+i = 0
+while i < len(words):
+    text = words[i]
+
+    has_upper = False
+    has_lower = False
+
+    j = 0
+    while j < len(text):
+        if text[j].isupper():
+            has_upper = True
+        else:
+            has_lower = True
+        j += 1
+
+    if has_upper and has_lower:
+        count += 1
+
+    i += 1
+
+print(count)
