@@ -1,103 +1,76 @@
-import pgzrun
-from random import randint
-
 import pygame
 
-WIDTH = 600
-HEIGHT = 500
+import os
+current_folder = os.path.dirname(os.path.abspath(__file__))
 
-score = 0
-game_over = False
+pygame.init()
+pygame.display.set_caption('Rocket in Space')
 
-gun = Actor('gun')
-gun.pos = (WIDTH // 2, HEIGHT - 50)
-small_gun = pygame.transform.scale(gun._surf, (70, 70))
-gun._surf = small_gun
-#gun.scale = 0.2
+# Set the height and width of the screen
+screen_width = 700
+screen_height = 500
+screen = pygame.display.set_mode([screen_width, screen_height])
 
+# Define the Player sprite
+# Player starts at (0,0) by default
+class Player(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        #self.image = pygame.image.load("character.png").convert_alpha()
+        self.image = pygame.image.load(os.path.join(current_folder, "character.png")).convert_alpha()
+        self.image = pygame.transform.scale(self.image, (70, 100))
+        self.rect = self.image.get_rect()
 
-bullets = []
-apples = []
+    # Move the sprite based on keypresses
+    def update(self, pressed_keys):
+        if pressed_keys[pygame.K_UP]:
+            self.rect.move_ip(0, -5)
+        if pressed_keys[pygame.K_DOWN]:
+            self.rect.move_ip(0, 5)
+        if pressed_keys[pygame.K_LEFT]:
+            self.rect.move_ip(-5, 0)
+        if pressed_keys[pygame.K_RIGHT]:
+            self.rect.move_ip(5, 0)
+            
 
-def spawn_apples():
-    apples.clear()
+        # Keep player on the screen
+        if self.rect.left < 0:
+            self.rect.left = 0
+        elif self.rect.right > screen_width:
+            self.rect.right = screen_width
+        if self.rect.top <= 0:
+            self.rect.top = 0
+        elif self.rect.bottom >= screen_height:
+            self.rect.bottom = screen_height
 
-    for i in range(5):
-        apple = Actor('apple')
-        apple.x = randint(50, WIDTH - 50)
-        apple.y = randint(-300, -50)
-        small_apple = pygame.transform.scale(apple._surf, (100, 100))
-        apple._surf = small_apple
-        apples.append(apple)
+#end of the class
 
-spawn_apples()
+#make a group os all the sprites
+sprites = pygame.sprite.Group()
 
-def draw():
-    screen.clear()
-    screen.fill("white")
+def startgame():
+    player = Player()
+    sprites.add(player)
 
-    gun.draw()
+    #start the game loop
+    while True:
+    #Look at every event
+        for event in pygame.event.get():
+          if event.type == pygame.QUIT:
+               # if it is quit the game
+                pygame.quit()
+                exit(0)
+        #Get the set of keys pressed and check for user input
+        pressed_keys = pygame.key.get_pressed()
+        player.update(pressed_keys)
 
-    for apple in apples:
-        apple.draw()
+        # Add background image
+        #screen.blit(pygame.image.load("background.png"), (0,0))
+        screen.blit(pygame.image.load(os.path.join("background.png")), (0,0))
 
-    for bullet in bullets:
-        bullet.draw()
+        #draw the sprites
+        sprites.draw(screen)
 
-    screen.draw.text("Score: " + str(score), color="black", topleft=(10, 10))
+        pygame.display.update()
 
-    if game_over:
-        screen.fill("white")
-        screen.draw.text(
-            "YOU WON!",
-            fontsize=60,
-            color="red",
-            center=(WIDTH // 2, HEIGHT // 2)
-        )
-
-def update():
-    global score, game_over
-
-    if game_over:
-        return
-
-    if keyboard.left and gun.x > 20:
-        gun.x -= 5
-
-    if keyboard.right and gun.x < WIDTH - 20:
-        gun.x += 5
-
-    for apple in apples:
-        apple.y += 2
-
-    for bullet in bullets[:]:
-        bullet.y -= 7
-
-        for apple in apples[:]:
-            if bullet.colliderect(apple):
-                if bullet in bullets:
-                    bullets.remove(bullet)
-                apples.remove(apple)
-                score += 1
-                break
-
-        if bullet.y < 0:
-            if bullet in bullets:
-                bullets.remove(bullet)
-
-    if len(apples) == 0:
-        spawn_apples()
-
-    if score >= 10:
-        game_over = True
-
-def on_key_down(key):
-    if key == keys.LCTRL or key == keys.RCTRL:
-        if not game_over:
-            bullet = Actor('bullet')
-            bullet.pos = (gun.x -50, gun.y - 15)
-            small_bullet = pygame.transform.scale(bullet._surf, (40, 40))
-            bullet._surf = small_bullet
-            bullets.append(bullet)
-
-pgzrun.go()
+startgame()
