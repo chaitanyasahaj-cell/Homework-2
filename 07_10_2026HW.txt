@@ -1,0 +1,29 @@
+class Question:
+    def __init__(self, text, answer):
+        self.text = text
+        self.answer = answer
+
+class Player:
+    def __init__(self):
+        self.score = 0
+
+    def answer_question(self, question):
+        answer = input(question.text + " ")
+        if answer.lower() == question.answer.lower():
+            self.score += 10
+            print("Correct! +10 points")
+        else:
+            print("Wrong!")
+
+questions = [
+    Question("Can plastic be recycled? ", "yes"),
+    Question("Is littering good for the environment? ", "no"),
+    Question("Can paper be recycled? ", "yes")
+]
+
+player = Player()
+
+for question in questions:
+    player.answer_question(question)
+
+print("Final score:", player.score)
